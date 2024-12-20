@@ -7,7 +7,7 @@ import sys
 import datetime
 
 client = TelegramClient('test', api_id, api_hash)
-victim = "SaIDaI7" 
+victim = "" 
 last = "дарова нига, го творить"
 
 client = TelegramClient('test', api_id, api_hash)
