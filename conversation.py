@@ -29,17 +29,18 @@ SAFETY_SETTINGS = [
     }
 ]
 
+
 class Unsafe_gemini(genai.GenerativeModel):
 
     def __cleaner(func):
         def wrapper(self,*args,**kwargs):
             try:
-                # print(f'\n\n\n\t{self.model_name} | {datetime.datetime.now()}\n\n')
+                print(f'\n\n\n\t{self.model_name} | {datetime.datetime.now()}\n\n')
                 func(self,*args,**kwargs)
             except Exception as ex:
                 print(str(ex))
             finally:
-                print(".")
+                print('\n\n\n////////////////////////////////')
         return wrapper
 
         
@@ -52,11 +53,15 @@ class Unsafe_gemini(genai.GenerativeModel):
     def start_chat(self):
         return super().start_chat(history=self.history)
     
-    @__cleaner
+    # @__cleaner
     def print_clean_answer(self,question):
+        q = ""
         response = self.start_chat().send_message(question,stream=True)
         for chunk in response:
-            print(chunk.text,end='')
+            q = chunk.text
+            print (q) 
+        return q 
+    
 
     def __get_history(self,model):
         history = []
@@ -68,3 +73,4 @@ class Unsafe_gemini(genai.GenerativeModel):
             content.role = 'model'
             history.append(content)
         return history
+    
