@@ -7,7 +7,7 @@ import sys
 import datetime
 
 client = TelegramClient('test', api_id, api_hash)
-victim = me
+victim = "Goggi1"
 
 @client.on(events.NewMessage(from_users=victim))
 async def my_event_handler(event):
@@ -32,5 +32,3 @@ async def main():
 
 with client: #here all shit begins
     client.loop.run_until_complete(main())
-
-
