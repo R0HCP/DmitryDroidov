@@ -1,3 +1,4 @@
+from colorama import Fore, Style
 import google.generativeai as genai
 import config
 from google.generativeai.types.content_types import to_content
@@ -44,23 +45,32 @@ class Unsafe_gemini(genai.GenerativeModel):
         return wrapper
 
         
-    def __init__(self,history,model = 'models/gemini-pro',temp = 2):
-        super().__init__(model,safety_settings=SAFETY_SETTINGS)
+    def __init__(self,history,model = 'models/gemini-pro',temp = 2, idea = ""):
+        super().__init__(model,safety_settings=SAFETY_SETTINGS, system_instruction=idea)
         generation_config = genai.GenerationConfig()
         generation_config.temperature = temp
         self.history = self.__get_history(history)
+
+
+
+
     
-    def start_chat(self):
+    def start_chat(self):  
         return super().start_chat(history=self.history)
     
     # @__cleaner
     def print_clean_answer(self,question):
         q = ""
-        response = self.start_chat().send_message(question,stream=True)
+        response = self.start_chat().send_message(question,stream=False)
+        print (response)
         for chunk in response:
-            q = chunk.text
-            print (q) 
-        return q 
+            print (chunk.text) 
+        print (Fore.BLUE +"_________________________________________________________________" + Style.RESET_ALL)
+        print (Fore.BLUE + response.parts[1].text + Style.RESET_ALL)
+        return response.parts[1].text
+        
+
+         
     
 
     def __get_history(self,model):
