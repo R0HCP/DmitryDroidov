@@ -1,3 +1,4 @@
+from colorama import Fore, Style
 import google.generativeai as genai
 import config
 from google.generativeai.types.content_types import to_content
@@ -64,8 +65,8 @@ class Unsafe_gemini(genai.GenerativeModel):
         print (response)
         for chunk in response:
             print (chunk.text) 
-        print ("\n\n\n\n\n\n\n\n\n")
-        print (response.parts[1].text)
+        print (Fore.BLUE +"_________________________________________________________________" + Style.RESET_ALL)
+        print (Fore.BLUE + response.parts[1].text + Style.RESET_ALL)
         return response.parts[1].text
         
 
