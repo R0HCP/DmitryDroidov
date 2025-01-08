@@ -4,7 +4,7 @@ import config
 from google.generativeai.types.content_types import to_content
 from google.generativeai.types.safety_types import HarmCategory,HarmBlockThreshold
 import datetime
-
+#я сам не ебу что тут происходит, но это работает
 genai.configure(api_key=config.google_api_key)
 
 SAFETY_SETTINGS = [
