@@ -69,10 +69,6 @@ class Unsafe_gemini(genai.GenerativeModel):
         print (Fore.BLUE + response.parts[1].text + Style.RESET_ALL)
         return response.parts[1].text
         
-
-         
-    
-
     def __get_history(self,model):
         history = []
         for i in model:

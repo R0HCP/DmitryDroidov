@@ -25,13 +25,15 @@ def dm(client):
                 print (Fore.GREEN + "Упомянут", Style.RESET_ALL)
                 try:
 
-                    if event.raw_text != "-смс": await client.send_message(event.chat_id, answer(event.raw_text), reply_to=event.message.id) #чтоб он ирису не отвечал
+                    if event.raw_text != "-смс": await client.send_message(event.chat_id, answer("пользователь с именем" + sender.first_name + "говорит" + event.raw_text), reply_to=event.message.id) #чтоб он ирису не отвечал
                 except Exception as e:
-                    # try:
-                    #     if event.raw_text != "-смс": await client.send_message(event.chat_id, f"Произошла ошибка: {e}", reply_to=event.message.id)
+                    try:
+                        if event.raw_text != "-смс": 
+                            await client.send_message(event.chat_id, f"Произошла ошибка: {e}", reply_to=event.message.id)
+                            await client.send_file(event.chat_id, 'sticker.webp')
                         print(f"Произошла ошибка: {e}")
-                    # except Exception as e:
-                    #     print(f"с телегой: {e}")
+                    except Exception as e:
+                        print(f"с телегой: {e}")
     
     async def main():
         await client.start()
