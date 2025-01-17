@@ -1,6 +1,7 @@
 from colorama import Fore, Style
 import google.generativeai as genai
 import config
+import time
 from google.generativeai.types.content_types import to_content
 from google.generativeai.types.safety_types import HarmCategory,HarmBlockThreshold
 import datetime
@@ -33,16 +34,7 @@ SAFETY_SETTINGS = [
 
 class Unsafe_gemini(genai.GenerativeModel):
 
-    def __cleaner(func):
-        def wrapper(self,*args,**kwargs):
-            try:
-                print(f'\n\n\n\t{self.model_name} | {datetime.datetime.now()}\n\n')
-                func(self,*args,**kwargs)
-            except Exception as ex:
-                print(str(ex))
-            finally:
-                print('\n\n\n////////////////////////////////')
-        return wrapper
+
 
         
     def __init__(self,history,model = 'models/gemini-pro',temp = 2, idea = ""):
@@ -50,25 +42,43 @@ class Unsafe_gemini(genai.GenerativeModel):
         generation_config = genai.GenerationConfig()
         generation_config.temperature = temp
         self.history = self.__get_history(history)
-
-
-
-
+        
     
     def start_chat(self):  
         return super().start_chat(history=self.history)
     
     # @__cleaner
-    def print_clean_answer(self,question):
-        q = ""
+    def print_clean_answer(self,question,shorting = False):
         response = self.start_chat().send_message(question,stream=False)
-        print (response)
         for chunk in response:
-            print (chunk.text) 
+            print(chunk.text, end="")
         print (Fore.BLUE +"_________________________________________________________________" + Style.RESET_ALL)
-        print (Fore.BLUE + response.parts[1].text + Style.RESET_ALL)
-        return response.parts[1].text
+        # print (Fore.BLUE + response.parts[1].text + Style.RESET_ALL)
+        if len(response.parts) > 1:
+            fin = response.parts[1].text
+            print (Fore.BLUE + fin + Style.RESET_ALL)
+        else:
+            print (Fore.BLUE + "No sufficient parts in response" + Style.RESET_ALL)
+        while shorting and len(fin) > 140:
+            fin = self.short_answer(fin)
+
+        return fin, response.usage_metadata.total_token_count
+    
+
+    def short_answer(self,question):
+        print (Fore.RED + "Сокращаю сообщение" + Style.RESET_ALL)
         
+        while len(question) > 150:
+            question, _ = self.print_clean_answer(question + " сократи это сообщение меньше 140 символов", True)
+        if len(question) <= 150:
+            return question
+        else:
+            while len(question) > 150:
+                question, _ = self.print_clean_answer(question + " сократи это сообщение меньше 140 символов", True)
+            return question
+
+ 
+    
     def __get_history(self,model):
         history = []
         for i in model:
