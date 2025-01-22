@@ -22,7 +22,7 @@ def dm(client):
                 await client.send_message(sender,q)
             except Exception as e:
                 print(f"Произошла ошибка: {e}")
-            print ("Отправил: \n", Fore.YELLOW + q + Style.RESET_ALL, e)
+            print ("Отправил: \n", Fore.YELLOW + q + Style.RESET_ALL)
         
         elif event.is_group:#если это группа
             

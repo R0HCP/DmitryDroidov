@@ -50,15 +50,10 @@ class Unsafe_gemini(genai.GenerativeModel):
     # @__cleaner
     def print_clean_answer(self,question,shorting = False):
         response = self.start_chat().send_message(question,stream=False)
-        for chunk in response:
-            print(chunk.text, end="")
+        print (response.text)
         print (Fore.BLUE +"_________________________________________________________________" + Style.RESET_ALL)
         # print (Fore.BLUE + response.parts[1].text + Style.RESET_ALL)
-        if len(response.parts) > 1:
-            fin = response.parts[1].text
-            print (Fore.BLUE + fin + Style.RESET_ALL)
-        else:
-            print (Fore.BLUE + "No sufficient parts in response" + Style.RESET_ALL)
+        fin = response.text
         while shorting and len(fin) > 140:
             fin = self.short_answer(fin)
 
